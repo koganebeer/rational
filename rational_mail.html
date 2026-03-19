@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>取説依頼メール作成</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#222636;--border:#2e3348;
+  --accent:#4f7cff;--accent2:#7c5cfc;--green:#34d399;--red:#f87171;
+  --text:#e8eaf0;--text2:#8b90a8;--text3:#555a72;
+  --radius:12px;--rsm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+.header{background:linear-gradient(135deg,#1a1d27,#222636);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.header-title{font-size:15px;font-weight:700;letter-spacing:.05em;}
+.header-title span{color:var(--accent);}
+.tab-bar{display:flex;gap:4px;}
+.tab-btn{padding:7px 13px;border-radius:20px;border:none;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;background:transparent;color:var(--text2);}
+.tab-btn.active{background:var(--accent);color:#fff;}
+.page{display:none;padding:14px;}
+.page.active{display:block;}
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.stitle{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.stitle::before{content:'';width:3px;height:12px;background:var(--accent);border-radius:2px;display:block;}
+label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:500;}
+.fr{margin-bottom:10px;}
+.fr:last-child{margin-bottom:0;}
+input[type=text],input[type=date],textarea,select{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:15px;
+  padding:11px 12px;outline:none;-webkit-appearance:none;appearance:none;
+}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b90a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;
+}
+textarea{resize:vertical;min-height:80px;line-height:1.6;}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px;height:22px;}
+
+/* Time selector - native select style for mobile */
+.time-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;}
+.time-colon{text-align:center;font-size:22px;font-weight:700;color:var(--text2);padding-bottom:2px;}
+
+/* Model grid */
+.model-grid{display:grid;grid-template-columns:5fr 3fr 2fr;gap:5px;margin-bottom:6px;}
+.model-grid:last-child{margin-bottom:0;}
+
+/* Toggle */
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.tog-row:last-child{border-bottom:none;}
+.tog-label{font-size:14px;}
+.toggle{position:relative;width:46px;height:26px;flex-shrink:0;}
+.toggle input{display:none;}
+.tslider{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--border);border-radius:13px;cursor:pointer;transition:.2s;}
+.tslider::after{content:'';position:absolute;width:20px;height:20px;background:var(--text3);border-radius:50%;top:2px;left:2px;transition:.2s;}
+.toggle input:checked+.tslider{background:var(--accent);border-color:var(--accent);}
+.toggle input:checked+.tslider::after{transform:translateX(20px);background:#fff;}
+
+/* Request buttons */
+.req-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.req-btn{padding:10px 4px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;text-align:center;-webkit-appearance:none;}
+.req-btn.active{background:rgba(79,124,255,.15);border-color:var(--accent);color:var(--accent);}
+
+/* Dealer row */
+.dealer-row{display:flex;gap:8px;align-items:stretch;}
+.dealer-row select{flex:1;}
+.btn-icon{width:44px;min-width:44px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* Buttons */
+.btn{width:100%;padding:15px;border-radius:var(--radius);border:none;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);font-size:14px;padding:12px;}
+.btn-danger{background:transparent;color:var(--red);border:1px solid var(--red);font-size:12px;padding:6px 12px;width:auto;border-radius:var(--rsm);font-family:inherit;cursor:pointer;}
+.btn-add{background:rgba(79,124,255,.12);color:var(--accent);border:1px dashed var(--accent);font-size:13px;padding:10px;border-radius:var(--rsm);width:100%;cursor:pointer;font-family:inherit;font-weight:500;margin-top:8px;}
+
+/* Checkboxes */
+.chk-list{display:flex;flex-direction:column;gap:8px;}
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);cursor:pointer;}
+.chk-item.on{border-color:var(--accent);background:rgba(79,124,255,.07);}
+.chk-item input{width:20px;height:20px;min-width:20px;margin-top:1px;accent-color:var(--accent);}
+.chk-text{font-size:13px;line-height:1.5;}
+
+/* Preview */
+.prev-subject{font-size:12px;color:var(--text2);margin-bottom:6px;}
+.prev-subject span{color:var(--text);font-weight:700;}
+.prev-body{background:#fff;color:#000;border-radius:var(--radius);padding:16px;font-size:13px;line-height:1.8;white-space:pre-wrap;margin-bottom:12px;min-height:200px;}
+.divider{height:1px;background:var(--border);margin:10px 0;}
+
+/* Template card */
+.tpl-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.tpl-text{font-size:13px;line-height:1.5;flex:1;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding:20px 16px 40px;width:100%;max-width:500px;}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:16px;text-align:center;}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--green);color:#000;font-weight:700;font-size:13px;padding:11px 22px;border-radius:22px;z-index:999;transition:transform .3s;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:rgba(79,124,255,.15);color:var(--accent);margin-left:6px;}
+.hint{font-size:11px;color:var(--text3);margin-top:3px;}
+.fixed-item{font-size:13px;color:var(--text2);padding:8px 12px;background:var(--surface2);border-radius:var(--rsm);margin-bottom:6px;border:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title"><span>Rational</span> 取説依頼</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('form')">作成</button>
+    <button class="tab-btn" onclick="showTab('preview')">確認</button>
+    <button class="tab-btn" onclick="showTab('settings')">設定</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Dealer Modal -->
+<div class="modal-overlay" id="modal-dealer">
+  <div class="modal">
+    <div class="modal-title">ディーラーを新規登録</div>
+    <div class="fr"><label>ディーラー名</label><input type="text" id="new-dealer-name" placeholder="例：○○産業"></div>
+    <div class="fr"><label>担当者・連絡先</label><input type="text" id="new-dealer-contact" placeholder="例：山田さん 090-0000-0000"></div>
+    <div style="height:12px;"></div>
+    <button class="btn btn-primary" onclick="saveNewDealer()">登録する</button>
+    <div style="height:8px;"></div>
+    <button class="btn btn-secondary" onclick="closeModal()">キャンセル</button>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="page active" id="page-form">
+
+  <div class="section">
+    <div class="stitle">宛先・担当</div>
+    <div class="fr">
+      <label>TO（FL担当者）</label>
+      <select id="sel-fl">
+        <option value="">選択してください</option>
+        <option value="浅坂さん|y.asazaka@u-w.co.jp">FL 浅坂さん</option>
+        <option value="大平さん|ma.ohira.yu@gmail.com">FL 大平さん</option>
+        <option value="水戸容子さん|sweetslove120@gmail.com">FL 水戸容子さん</option>
+        <option value="山口さん|naonaohappynikkoniko6651@gmail.com">FL 山口さん</option>
+        <option value="伊東さん|kiki2525lala@gmail.com">FL 伊東さん</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">日時</div>
+    <div class="fr"><label>取説日</label><input type="date" id="inp-date"></div>
+    <div class="fr">
+      <label>時間</label>
+      <div class="time-row">
+        <select id="sel-hour"><option value="00">00</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10"selected>10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select>
+        <div class="time-colon">:</div>
+        <select id="sel-min">
+          <option value="00">00</option>
+          <option value="15">15</option>
+          <option value="30">30</option>
+          <option value="45">45</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">現場情報</div>
+    <div class="fr"><label>現場名</label><input type="text" id="inp-site" placeholder="例：さくら食堂"></div>
+    <div class="fr"><label>住所</label><input type="text" id="inp-addr" placeholder="例：東京都新宿区西新宿1-1-1"></div>
+    <div class="fr"><label>電話番号</label><input type="text" id="inp-tel" placeholder="例：03-0000-0000" inputmode="tel"></div>
+    <div class="fr"><label>現場担当者名・メールなど</label><input type="text" id="inp-tanto" placeholder="例：栄養士様"></div>
+    <div class="fr"><label>SF URL</label><input type="text" id="inp-sf" placeholder="https://rational.lightning.force.com/..." inputmode="url"></div>
+    <div class="fr"><label>Web URL</label><input type="text" id="inp-web" placeholder="https://..." inputmode="url"></div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">機器情報</div>
+    <div class="fr">
+      <label>モデル / 動力 / 台数</label>
+      <div class="model-grid">
+        <select id="sel-model-1"><option value="">（未選択）</option><option value="iCombi Pro XS">iCombi Pro XS</option><option value="iCombi Pro 6-1/1">iCombi Pro 6-1/1</option><option value="iCombi Pro 10-1/1">iCombi Pro 10-1/1</option><option value="iCombi Pro 20-1/1">iCombi Pro 20-1/1</option><option value="iCombi Pro 6-2/1">iCombi Pro 6-2/1</option><option value="iCombi Pro 10-2/1">iCombi Pro 10-2/1</option><option value="iCombi Pro 20-2/1">iCombi Pro 20-2/1</option><option value="iCombi Classic 6-1/1">iCombi Classic 6-1/1</option><option value="iCombi Classic 10-1/1">iCombi Classic 10-1/1</option><option value="iCombi Classic 20-1/1">iCombi Classic 20-1/1</option><option value="iCombi Classic 6-2/1">iCombi Classic 6-2/1</option><option value="iCombi Classic 10-2/1">iCombi Classic 10-2/1</option><option value="iCombi Classic 20-2/1">iCombi Classic 20-2/1</option><option value="iVario XS">iVario XS</option><option value="iVario Pro 2-S （圧力なし）">iVario Pro 2-S （圧力なし）</option><option value="iVario Pro 2-S （圧力あり）">iVario Pro 2-S （圧力あり）</option><option value="iVario Pro L　（圧力なし）">iVario Pro L　（圧力なし）</option><option value="iVario Pro L　（圧力あり）">iVario Pro L　（圧力あり）</option><option value="iVario Pro XL （圧力なし）">iVario Pro XL （圧力なし）</option><option value="iVario Pro XL （圧力あり）">iVario Pro XL （圧力あり）</option></select>
+        <select id="sel-power-1"><option value="">—</option><option>電気式</option><option>都市ガス</option><option>LPG</option></select>
+        <select id="sel-qty-1"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
+      </div>
+      <div class="model-grid">
+        <select id="sel-model-2"><option value="">（未選択）</option><option value="iCombi Pro XS">iCombi Pro XS</option><option value="iCombi Pro 6-1/1">iCombi Pro 6-1/1</option><option value="iCombi Pro 10-1/1">iCombi Pro 10-1/1</option><option value="iCombi Pro 20-1/1">iCombi Pro 20-1/1</option><option value="iCombi Pro 6-2/1">iCombi Pro 6-2/1</option><option value="iCombi Pro 10-2/1">iCombi Pro 10-2/1</option><option value="iCombi Pro 20-2/1">iCombi Pro 20-2/1</option><option value="iCombi Classic 6-1/1">iCombi Classic 6-1/1</option><option value="iCombi Classic 10-1/1">iCombi Classic 10-1/1</option><option value="iCombi Classic 20-1/1">iCombi Classic 20-1/1</option><option value="iCombi Classic 6-2/1">iCombi Classic 6-2/1</option><option value="iCombi Classic 10-2/1">iCombi Classic 10-2/1</option><option value="iCombi Classic 20-2/1">iCombi Classic 20-2/1</option><option value="iVario XS">iVario XS</option><option value="iVario Pro 2-S （圧力なし）">iVario Pro 2-S （圧力なし）</option><option value="iVario Pro 2-S （圧力あり）">iVario Pro 2-S （圧力あり）</option><option value="iVario Pro L　（圧力なし）">iVario Pro L　（圧力なし）</option><option value="iVario Pro L　（圧力あり）">iVario Pro L　（圧力あり）</option><option value="iVario Pro XL （圧力なし）">iVario Pro XL （圧力なし）</option><option value="iVario Pro XL （圧力あり）">iVario Pro XL （圧力あり）</option></select>
+        <select id="sel-power-2"><option value="">—</option><option>電気式</option><option>都市ガス</option><option>LPG</option></select>
+        <select id="sel-qty-2"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
+      </div>
+      <div class="model-grid">
+        <select id="sel-model-3"><option value="">（未選択）</option><option value="iCombi Pro XS">iCombi Pro XS</option><option value="iCombi Pro 6-1/1">iCombi Pro 6-1/1</option><option value="iCombi Pro 10-1/1">iCombi Pro 10-1/1</option><option value="iCombi Pro 20-1/1">iCombi Pro 20-1/1</option><option value="iCombi Pro 6-2/1">iCombi Pro 6-2/1</option><option value="iCombi Pro 10-2/1">iCombi Pro 10-2/1</option><option value="iCombi Pro 20-2/1">iCombi Pro 20-2/1</option><option value="iCombi Classic 6-1/1">iCombi Classic 6-1/1</option><option value="iCombi Classic 10-1/1">iCombi Classic 10-1/1</option><option value="iCombi Classic 20-1/1">iCombi Classic 20-1/1</option><option value="iCombi Classic 6-2/1">iCombi Classic 6-2/1</option><option value="iCombi Classic 10-2/1">iCombi Classic 10-2/1</option><option value="iCombi Classic 20-2/1">iCombi Classic 20-2/1</option><option value="iVario XS">iVario XS</option><option value="iVario Pro 2-S （圧力なし）">iVario Pro 2-S （圧力なし）</option><option value="iVario Pro 2-S （圧力あり）">iVario Pro 2-S （圧力あり）</option><option value="iVario Pro L　（圧力なし）">iVario Pro L　（圧力なし）</option><option value="iVario Pro L　（圧力あり）">iVario Pro L　（圧力あり）</option><option value="iVario Pro XL （圧力なし）">iVario Pro XL （圧力なし）</option><option value="iVario Pro XL （圧力あり）">iVario Pro XL （圧力あり）</option></select>
+        <select id="sel-power-3"><option value="">—</option><option>電気式</option><option>都市ガス</option><option>LPG</option></select>
+        <select id="sel-qty-3"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
+      </div>
+    </div>
+    <div class="fr"><label>設置日</label><input type="date" id="inp-install-date"></div>
+    <div class="fr">
+      <label>依頼内容</label>
+      <div class="req-row">
+        <button class="req-btn active" onclick="setReq('通常取説',this)">通常取説</button>
+        <button class="req-btn" onclick="setReq('取説＋試作あり',this)">取説＋試作</button>
+        <button class="req-btn" onclick="setReq('試作依頼',this)">試作</button>
+        <button class="req-btn" onclick="setReq('other',this)">その他</button>
+      </div>
+      <input type="text" id="inp-req-other" placeholder="依頼内容を入力" style="display:none;">
+    </div>
+    <div class="tog-row">
+      <span class="tog-label">ステッカー</span>
+      <label class="toggle"><input type="checkbox" id="tog-sticker" onchange="onStickerChange()"><span class="tslider"></span></label>
+    </div>
+    <div id="sticker-note-row" style="display:none;padding:8px 0 4px;">
+      <input type="text" id="inp-sticker-note" placeholder="ステッカー内容を入力">
+    </div>
+    <div class="tog-row"><span class="tog-label">ディーラー立会い</span><label class="toggle"><input type="checkbox" id="tog-attend"><span class="tslider"></span></label></div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">ディーラー <span class="badge">自動保存</span></div>
+    <div class="fr">
+      <label>ディーラー名</label>
+      <div class="dealer-row">
+        <select id="sel-dealer" onchange="onDealerChange()"></select>
+        <button class="btn-icon" onclick="openModal()">＋</button>
+      </div>
+    </div>
+    <div class="fr">
+      <label>担当者・連絡先</label>
+      <input type="text" id="inp-dealer-contact" placeholder="例：山田さん 090-0000-0000" onchange="updateDealerContact()">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">RSA / RSM <span class="badge">自動保存</span></div>
+    <div class="fr"><label>RSA</label><input type="text" id="inp-rsa" placeholder="例：担当者名" oninput="saveRSM()"></div>
+    <div class="fr"><label>RSM・連絡先</label><input type="text" id="inp-rsm" placeholder="例：担当者名 090-0000-0000" oninput="saveRSM()"></div>
+  </div>
+
+  <div class="section">
+    <div class="stitle">備考</div>
+
+    <!-- 固定 -->
+    <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.08em;margin-bottom:6px;">● 固定（常に送信）</div>
+    <div class="fixed-item">✓ マニュアル調理の説明をお願いします。</div>
+    <div class="fixed-item" style="margin-bottom:12px;">✓ 洗浄、日頃のメンテナンスと注意事項の説明をお願いします。</div>
+
+    <!-- 追加説明 -->
+    <div style="font-size:11px;color:var(--text2);font-weight:700;letter-spacing:.08em;margin-bottom:6px;">● 追加説明</div>
+    <div class="chk-list" style="margin-bottom:14px;">
+      <label class="chk-item"><input type="checkbox" value="自動調理の説明もお願いします。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">自動調理の説明もお願いします。</span></label>
+      <label class="chk-item"><input type="checkbox" value="同時調理の説明もお願いします。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">同時調理の説明もお願いします。</span></label>
+      <label class="chk-item"><input type="checkbox" value="規定プログラムの説明をお願いします。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">規定プログラムの説明をお願いします。</span></label>
+      <label class="chk-item"><input type="checkbox" value="新規プログラム登録の説明もお願いします。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">新規プログラム登録の説明もお願いします。</span></label>
+    </div>
+
+    <!-- 事前設定 -->
+    <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.08em;margin-bottom:6px;">● 事前設定</div>
+    <div class="fixed-item" style="margin-bottom:8px;">✓ 時刻・日付設定（固定）</div>
+    <div class="chk-list" style="margin-bottom:14px;">
+      <label class="chk-item"><input type="checkbox" value="日付形式 yy/mm/dd（ICPのみ）" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">日付形式 yy/mm/dd <span style="font-size:11px;color:var(--accent);">ICPのみ</span></span></label>
+      <label class="chk-item"><input type="checkbox" value="洗浄後電源を切るをオン（ICPのみ）" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">洗浄後電源を切るをオン <span style="font-size:11px;color:var(--accent);">ICPのみ</span></span></label>
+      <label class="chk-item"><input type="checkbox" value="自動減光オフ（ICPのみ）" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">自動減光オフ <span style="font-size:11px;color:var(--accent);">ICPのみ</span></span></label>
+      <label class="chk-item"><input type="checkbox" value="既存プログラム全消去" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">既存プログラム全消去</span></label>
+      <label class="chk-item"><input type="checkbox" value="USBによるプログラムインストール" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">USBによるプログラムインストール</span></label>
+      <label class="chk-item"><input type="checkbox" value="日本語設定（ICC）" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">日本語設定 <span style="font-size:11px;color:var(--accent);">ICC</span></span></label>
+    </div>
+
+    <!-- その他 -->
+    <div style="font-size:11px;color:var(--text2);font-weight:700;letter-spacing:.08em;margin-bottom:6px;">● その他</div>
+    <div class="chk-list" style="margin-bottom:14px;">
+      <label class="chk-item"><input type="checkbox" value="月１度エアフィルター清掃を強くお伝えください。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">月１度エアフィルター清掃を強くお伝えください。</span></label>
+      <label class="chk-item"><input type="checkbox" value="庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。</span></label>
+      <label class="chk-item"><input type="checkbox" value="Wi-Fi環境のご確認をお願いします。" onchange="this.closest('label').classList.toggle('on',this.checked)"><span class="chk-text">Wi-Fi環境のご確認をお願いします。</span></label>
+    </div>
+
+    <!-- 自由追記 -->
+    <div style="font-size:11px;color:var(--text2);font-weight:700;letter-spacing:.08em;margin-bottom:6px;">● 自由追記</div>
+    <textarea id="inp-note" placeholder="その他追記したい内容を入力"></textarea>
+  </div>
+
+  <button class="btn btn-primary" onclick="showPreview()">📧 メールを作成する</button>
+</div>
+
+<!-- PREVIEW -->
+<div class="page" id="page-preview">
+  <div class="section">
+    <div class="prev-subject">件名：<span id="prev-subj">—</span></div>
+    <div class="divider"></div>
+    <div class="prev-body" id="prev-body"></div>
+  </div>
+  <button class="btn btn-primary" onclick="openMailto()">📱 Outlookで開く</button>
+  <div style="height:8px;"></div>
+  <button class="btn btn-secondary" onclick="copyText()">📋 テキストをコピー</button>
+  <div style="height:8px;"></div>
+  <button class="btn btn-secondary" onclick="showTab('form')">← フォームに戻る</button>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="section">
+    <div class="stitle">備考 定型文の管理</div>
+    <div id="tpl-list"></div>
+    <button class="btn-add" onclick="addTemplate()">＋ 定型文を追加</button>
+  </div>
+  <div class="section">
+    <div class="stitle">モデルの管理</div>
+    <div id="model-list"></div>
+    <button class="btn-add" onclick="addModel()">＋ モデルを追加</button>
+  </div>
+  <div class="section">
+    <div class="stitle">ディーラーの管理</div>
+    <div id="dealer-list"></div>
+  </div>
+</div>
+
+<script>
+// ===== ユーティリティ =====
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $(id){return document.getElementById(id);}
+function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+const LS={
+  get(k,d){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):d;}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+
+// ===== 定数 =====
+const CC='JapanAdmin@rational-online.com,a.kikumoto@rational-online.com,t.sugahara@rational-online.com,h.hirata@rational-online.com,s.ukai@rational-online.com';
+
+const DEF_TPL=[
+  'マニュアル中心に説明をお願いします。',
+  '月１度エアフィルター清掃を強くお伝えください。',
+  '庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。',
+  'コネクテッドクッキング接続予定です。Wi-Fi環境のご確認をお願いします。',
+  '事前設定をお願いします（時刻確認・日付形式 yy/mm/dd・自動減光オフ・既存プログラム全消去・洗浄後電源を切るをオン）',
+  '風量の説明、マニュアルプログラム設定の説明をお願いします。',
+];
+
+const DEF_MODELS=['iCombi Pro XS', 'iCombi Pro 6-1/1', 'iCombi Pro 10-1/1', 'iCombi Pro 20-1/1', 'iCombi Pro 6-2/1', 'iCombi Pro 10-2/1', 'iCombi Pro 20-2/1', 'iCombi Classic 6-1/1', 'iCombi Classic 10-1/1', 'iCombi Classic 20-1/1', 'iCombi Classic 6-2/1', 'iCombi Classic 10-2/1', 'iCombi Classic 20-2/1', 'iVario XS', 'iVario Pro 2-S （圧力なし）', 'iVario Pro 2-S （圧力あり）', 'iVario Pro L\u3000（圧力なし）', 'iVario Pro L\u3000（圧力あり）', 'iVario Pro XL （圧力なし）', 'iVario Pro XL （圧力あり）'];
+
+// ===== 状態 =====
+let currentReq='通常取説';
+
+// ===== タブ =====
+function showTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  $('page-'+tab).classList.add('active');
+  const idx=['form','preview','settings'].indexOf(tab);
+  if(idx>=0)document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  if(tab==='settings')renderSettings();
+}
+
+// ===== 初期化 =====
+document.addEventListener('DOMContentLoaded', function(){
+  // 今日の日付をセット
+  const t=new Date();
+  const fmt=n=>String(n).padStart(2,'0');
+  $('inp-date').value=`${t.getFullYear()}-${fmt(t.getMonth()+1)}-${fmt(t.getDate())}`;
+
+  // RSM復元
+  const rsm=LS.get('rational_rsm',null);
+  if(rsm){$('inp-rsa').value=rsm.rsa||'';$('inp-rsm').value=rsm.rsm||'';}
+
+  // モデル・チェックボックス・ディーラー描画
+  renderDealerSelect();
+});
+
+// ===== 依頼内容 =====
+function setReq(val, btn){
+  currentReq=val;
+  document.querySelectorAll('.req-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  $('inp-req-other').style.display=val==='other'?'block':'none';
+}
+function getReqText(){
+  return currentReq==='other'?($('inp-req-other').value||'その他'):currentReq;
+}
+
+// ===== モデル =====
+function renderModelSelects(){
+  const models=LS.get('rational_models',DEF_MODELS);
+  const opts='<option value="">（未選択）</option>'+models.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join('');
+  [1,2,3].forEach(i=>{
+    const sel=$('sel-model-'+i);
+    if(!sel)return;
+    const cur=sel.value;
+    sel.innerHTML=opts;
+    if(cur)sel.value=cur;
+  });
+}
+
+// ===== チェックボックス =====
+function renderCheckboxes(){
+  const tpls=LS.get('rational_templates',DEF_TPL);
+  $('chk-list').innerHTML=tpls.map((t,i)=>`
+    <label class="chk-item" id="chk-wrap-${i}">
+      <input type="checkbox" value="${esc(t)}" onchange="this.closest('label').classList.toggle('on',this.checked)">
+      <span class="chk-text">${esc(t)}</span>
+    </label>`).join('');
+}
+
+// ===== ディーラー =====
+function renderDealerSelect(){
+  const dealers=LS.get('rational_dealers',[]);
+  const cur=$('sel-dealer').value;
+  $('sel-dealer').innerHTML='<option value="">選択してください</option>'+
+    dealers.map(d=>`<option value="${esc(d.name)}">${esc(d.name)}</option>`).join('');
+  if(cur)$('sel-dealer').value=cur;
+}
+function onDealerChange(){
+  const name=$('sel-dealer').value;
+  const dealers=LS.get('rational_dealers',[]);
+  const found=dealers.find(d=>d.name===name);
+  $('inp-dealer-contact').value=found?found.contact:'';
+}
+function updateDealerContact(){
+  const name=$('sel-dealer').value;
+  if(!name)return;
+  const dealers=LS.get('rational_dealers',[]);
+  const found=dealers.find(d=>d.name===name);
+  if(found){found.contact=$('inp-dealer-contact').value;LS.set('rational_dealers',dealers);}
+}
+function openModal(){
+  $('new-dealer-name').value='';$('new-dealer-contact').value='';
+  $('modal-dealer').classList.add('open');
+}
+function closeModal(){$('modal-dealer').classList.remove('open');}
+function saveNewDealer(){
+  const name=$('new-dealer-name').value.trim();
+  const contact=$('new-dealer-contact').value.trim();
+  if(!name){showToast('⚠ ディーラー名を入力してください');return;}
+  const dealers=LS.get('rational_dealers',[]);
+  const ex=dealers.find(d=>d.name===name);
+  if(ex)ex.contact=contact;else dealers.push({name,contact});
+  LS.set('rational_dealers',dealers);
+  renderDealerSelect();
+  $('sel-dealer').value=name;
+  $('inp-dealer-contact').value=contact;
+  closeModal();showToast('✓ ディーラーを登録しました');
+}
+
+// ===== RSM保存 =====
+function onStickerChange(){
+  const checked=document.getElementById('tog-sticker').checked;
+  document.getElementById('sticker-note-row').style.display=checked?'block':'none';
+  if(!checked)document.getElementById('inp-sticker-note').value='';
+}
+function saveRSM(){LS.set('rational_rsm',{rsa:$('inp-rsa').value,rsm:$('inp-rsm').value});}
+
+// ===== 日付フォーマット =====
+function fmtDate(val){
+  if(!val)return'';
+  const d=new Date(val+'T00:00:00');
+  return`${d.getMonth()+1}/${d.getDate()}(${'日月火水木金土'[d.getDay()]})`;
+}
+
+// ===== メール本文生成 =====
+function buildMail(){
+  const flOpt=$('sel-fl').selectedOptions[0];
+  const flVal=flOpt?flOpt.value:'';
+  const flName=flVal?flVal.split('|')[0]:'（FL未選択）';
+  const flEmail=flVal?flVal.split('|')[1]:'';
+
+  const dateJP=fmtDate($('inp-date').value);
+  const hour=$('sel-hour').value||'10';
+  const min=$('sel-min').value||'00';
+  const time=`${hour}：${min}`;
+  const installVal=$('inp-install-date').value;
+  const installDate=installVal?installVal.replace(/-/g,'/'):'';
+  const site=$('inp-site').value||'（未入力）';
+
+  // モデル行（選択されたものだけ）
+  const modelLines=[1,2,3].map(i=>{
+    const m=$('sel-model-'+i).value;
+    const p=$('sel-power-'+i).value;
+    const q=$('sel-qty-'+i).value;
+    if(!m)return null;
+    return[m,p,q].filter(Boolean).join('　');
+  }).filter(Boolean);
+  const modelText=modelLines.length?modelLines.join('\n　　　　　'):'（未選択）';
+
+  // 備考：固定文＋チェック＋自由追記
+  const fixedLines=[
+    'マニュアル調理の説明をお願いします。',
+    '洗浄、日頃のメンテナンスと注意事項の説明をお願いします。',
+    '事前設定（時刻・日付設定）をお願いします。',
+  ];
+  const checked=[...document.querySelectorAll('.chk-list input:checked')].map(el=>el.value);
+  const note=$('inp-note').value;
+  const noteText=[...fixedLines,...checked,note].filter(Boolean).join('\n');
+
+  const subject=`【取説依頼】　${dateJP}${time} ${site}　${flName}`;
+  const body=
+`${flName}
+
+お疲れ様です。
+以下取説のご対応お願い致します。
+
+【FLの名前】${flName}
+【取説日】${dateJP}
+【時間】${time}
+【現場名】${site}
+【SF】${$('inp-sf').value}
+【web】${$('inp-web').value}
+【住所】${$('inp-addr').value}
+【電話番号】${$('inp-tel').value}
+【現場担当者名、メールなど】${$('inp-tanto').value||'ご担当者様'}
+【依頼内容】${getReqText()}
+【モデル】${modelText}
+【設置日】${installDate}
+【ステッカー】${$('tog-sticker').checked?'あり（'+($('inp-sticker-note').value||'')+'）':'なし'}
+【ディーラー名】${$('sel-dealer').value}
+【ディーラー担当者、連絡先】${$('inp-dealer-contact').value}
+【ディーラー立会い】${$('tog-attend').checked?'あり':'なし'}
+【RSA】${$('inp-rsa').value}
+【RSM、連絡先】${$('inp-rsm').value}
+【備考】
+${noteText}
+
+以上、宜しくお願い致します。`;
+
+  return{subject,body,flEmail};
+}
+
+// ===== プレビュー =====
+function showPreview(){
+  try{
+    const{subject,body}=buildMail();
+    $('prev-subj').textContent=subject;
+    $('prev-body').textContent=body;
+    showTab('preview');
+  }catch(e){showToast('⚠ エラーが発生しました: '+e.message);}
+}
+
+// ===== Outlookで開く =====
+function openMailto(){
+  const{subject,body,flEmail}=buildMail();
+  window.location.href=`mailto:${encodeURIComponent(flEmail)}?cc=${encodeURIComponent(CC)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+// ===== コピー =====
+function copyText(){
+  const{subject,body}=buildMail();
+  const txt=`件名：${subject}\n\n${body}`;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>showToast('✓ コピーしました')).catch(()=>fallbackCopy(txt));
+  }else{fallbackCopy(txt);}
+}
+function fallbackCopy(txt){
+  const ta=document.createElement('textarea');
+  ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');showToast('✓ コピーしました');}catch(e){showToast('コピーできませんでした');}
+  document.body.removeChild(ta);
+}
+
+// ===== 設定 =====
+function renderSettings(){
+  // 定型文
+  const tpls=LS.get('rational_templates',DEF_TPL);
+  $('tpl-list').innerHTML=tpls.map((t,i)=>
+    `<div class="tpl-card"><span class="tpl-text">${esc(t)}</span><button class="btn-danger" onclick="delTemplate(${i})">削除</button></div>`
+  ).join('')||'<p style="font-size:13px;color:var(--text3);">まだありません</p>';
+
+  // モデル
+  const models=LS.get('rational_models',DEF_MODELS);
+  $('model-list').innerHTML=models.map((m,i)=>
+    `<div class="tpl-card"><span class="tpl-text">${esc(m)}</span><button class="btn-danger" onclick="delModel(${i})">削除</button></div>`
+  ).join('');
+
+  // ディーラー
+  const dealers=LS.get('rational_dealers',[]);
+  $('dealer-list').innerHTML=dealers.length?dealers.map((d,i)=>
+    `<div class="tpl-card"><div style="flex:1;"><div style="font-size:13px;font-weight:700;">${esc(d.name)}</div><div style="font-size:12px;color:var(--text2);margin-top:2px;">${esc(d.contact||'—')}</div></div><button class="btn-danger" onclick="delDealer(${i})">削除</button></div>`
+  ).join(''):'<p style="font-size:13px;color:var(--text3);">まだ登録されていません</p>';
+}
+
+function addTemplate(){
+  const t=prompt('定型文を入力してください：');
+  if(!t||!t.trim())return;
+  const arr=LS.get('rational_templates',DEF_TPL);
+  arr.push(t.trim());LS.set('rational_templates',arr);
+  renderSettings();renderCheckboxes();showToast('✓ 定型文を追加しました');
+}
+function delTemplate(i){
+  const arr=LS.get('rational_templates',DEF_TPL);
+  arr.splice(i,1);LS.set('rational_templates',arr);
+  renderSettings();renderCheckboxes();
+}
+function addModel(){
+  const t=prompt('モデル名を入力してください：');
+  if(!t||!t.trim())return;
+  const arr=LS.get('rational_models',DEF_MODELS);
+  arr.push(t.trim());LS.set('rational_models',arr);
+  renderSettings();renderModelSelects();showToast('✓ モデルを追加しました');
+}
+function delModel(i){
+  const arr=LS.get('rational_models',DEF_MODELS);
+  arr.splice(i,1);LS.set('rational_models',arr);
+  renderSettings();renderModelSelects();
+}
+function delDealer(i){
+  const arr=LS.get('rational_dealers',[]);
+  arr.splice(i,1);LS.set('rational_dealers',arr);
+  renderSettings();renderDealerSelect();
+}
+</script>
+</body>
+</html>
