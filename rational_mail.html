@@ -103,10 +103,13 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
 
 <div class="header">
   <div class="header-title"><span>Rational</span> 取説依頼</div>
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="showTab('form')">作成</button>
-    <button class="tab-btn" onclick="showTab('preview')">確認</button>
-    <button class="tab-btn" onclick="showTab('settings')">設定</button>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <button onclick="location.reload()" style="background:rgba(79,124,255,.15);border:1px solid var(--accent);color:var(--accent);border-radius:20px;padding:6px 11px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;">🔄 更新</button>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('form')">作成</button>
+      <button class="tab-btn" onclick="showTab('preview')">確認</button>
+      <button class="tab-btn" onclick="showTab('settings')">設定</button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
