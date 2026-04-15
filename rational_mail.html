@@ -137,6 +137,32 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
   </div>
 </div>
 
+<!-- ディーラー編集モーダル -->
+<div class="modal-overlay" id="modal-dealer-edit">
+  <div class="modal">
+    <div class="modal-title">ディーラーを編集</div>
+    <div class="fr"><label class="lbl">ディーラー名</label><input type="text" id="edit-dealer-name" placeholder="例：○○産業"></div>
+    <div class="fr"><label class="lbl">担当者・連絡先</label><input type="text" id="edit-dealer-contact" placeholder="例：山田さん 090-0000-0000"></div>
+    <div style="height:12px;"></div>
+    <button class="btn btn-primary" onclick="saveEditDealer()">保存する</button>
+    <div style="height:8px;"></div>
+    <button class="btn btn-secondary" onclick="closeModal('modal-dealer-edit')">キャンセル</button>
+  </div>
+</div>
+
+<!-- 自由記入編集モーダル -->
+<div class="modal-overlay" id="modal-free-edit">
+  <div class="modal">
+    <div class="modal-title">自由記入を編集</div>
+    <div class="fr"><label class="lbl">名前</label><input type="text" id="edit-free-name" placeholder="テンプレート名"></div>
+    <div class="fr"><label class="lbl">内容</label><textarea id="edit-free-body" style="min-height:120px;"></textarea></div>
+    <div style="height:12px;"></div>
+    <button class="btn btn-primary" onclick="saveEditFree()">保存する</button>
+    <div style="height:8px;"></div>
+    <button class="btn btn-secondary" onclick="closeModal('modal-free-edit')">キャンセル</button>
+  </div>
+</div>
+
 <!-- FL追加モーダル -->
 <div class="modal-overlay" id="modal-fl">
   <div class="modal">
@@ -275,31 +301,31 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
 
       <div class="sec-label dim">● 基本説明</div>
       <div class="chk-list" style="margin-bottom:12px;">
-        <label class="chk-item"><input type="checkbox" value="マニュアル調理中心の説明をお願いします。" onchange="chkToggle(this)"><span class="chk-text">マニュアル調理中心の説明をお願いします。</span></label>
-        <label class="chk-item"><input type="checkbox" value="プログラム中心の説明をお願いします。" onchange="chkToggle(this)"><span class="chk-text">プログラム中心の説明をお願いします。</span></label>
-        <label class="chk-item"><input type="checkbox" value="洗浄、日頃のメンテナンスと注意事項の説明をお願いします。" onchange="chkToggle(this)" checked><span class="chk-text">洗浄、日頃のメンテナンスと注意事項の説明をお願いします。</span></label>
-        <label class="chk-item on"><input type="checkbox" value="自動調理の説明もお願いします。" onchange="chkToggle(this)"><span class="chk-text">自動調理の説明もお願いします。</span></label>
-        <label class="chk-item"><input type="checkbox" value="同時調理の説明もお願いします。" onchange="chkToggle(this)"><span class="chk-text">同時調理の説明もお願いします。</span></label>
-        <label class="chk-item"><input type="checkbox" value="新規プログラム登録の説明もお願いします。" onchange="chkToggle(this)"><span class="chk-text">新規プログラム登録の説明もお願いします。</span></label>
+        <label class="chk-item"><input type="checkbox" value="マニュアル調理中心の説明をお願いします。" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">マニュアル調理中心の説明をお願いします。</span></label>
+        <label class="chk-item"><input type="checkbox" value="プログラム中心の説明をお願いします。" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">プログラム中心の説明をお願いします。</span></label>
+        <label class="chk-item"><input type="checkbox" value="洗浄、日頃のメンテナンスと注意事項の説明をお願いします。" data-group="basic" onchange="chkToggle(this)" checked><span class="chk-text">洗浄、日頃のメンテナンスと注意事項の説明をお願いします。</span></label>
+        <label class="chk-item on"><input type="checkbox" value="自動調理の説明" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">自動調理の説明</span></label>
+        <label class="chk-item"><input type="checkbox" value="同時調理の説明" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">同時調理の説明</span></label>
+        <label class="chk-item"><input type="checkbox" value="プログラム登録方法の説明" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">プログラム登録方法の説明</span></label>
       </div>
 
       <div class="sec-label accent">● 事前設定</div>
-      <div class="fixed-item" style="margin-bottom:8px;">✓ 時刻・日付設定（固定）</div>
       <div class="chk-list" style="margin-bottom:12px;">
-        <label class="chk-item"><input type="checkbox" value="日付形式 yy/mm/dd" onchange="chkToggle(this)"><span class="chk-text">日付形式 yy/mm/dd</span></label>
-        <label class="chk-item"><input type="checkbox" value="洗浄後電源を切るをオン" onchange="chkToggle(this)"><span class="chk-text">洗浄後電源を切るをオン</span></label>
-        <label class="chk-item"><input type="checkbox" value="自動減光オフ" onchange="chkToggle(this)"><span class="chk-text">自動減光オフ</span></label>
-        <label class="chk-item"><input type="checkbox" value="既存プログラム全消去" onchange="chkToggle(this)"><span class="chk-text">既存プログラム全消去</span></label>
-        <label class="chk-item"><input type="checkbox" value="USBによるプログラムインストール" onchange="chkToggle(this)"><span class="chk-text">USBによるプログラムインストール</span></label>
-        <label class="chk-item"><input type="checkbox" value="日本語設定（ICC）" onchange="chkToggle(this)"><span class="chk-text">日本語設定（ICC）</span></label>
+        <label class="chk-item"><input type="checkbox" value="時刻・日付設定" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">時刻・日付設定</span></label>
+        <label class="chk-item"><input type="checkbox" value="日付形式 yy/mm/dd" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">日付形式 yy/mm/dd</span></label>
+        <label class="chk-item"><input type="checkbox" value="洗浄後電源を切るをオン" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">洗浄後電源を切るをオン</span></label>
+        <label class="chk-item"><input type="checkbox" value="自動減光オフ" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">自動減光オフ</span></label>
+        <label class="chk-item"><input type="checkbox" value="既存プログラム全消去" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">既存プログラム全消去</span></label>
+        <label class="chk-item"><input type="checkbox" value="USBによるプログラムインストール" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">USBによるプログラムインストール</span></label>
+        <label class="chk-item"><input type="checkbox" value="日本語設定（ICC）" data-group="preset" onchange="chkToggle(this)"><span class="chk-text">日本語設定（ICC）</span></label>
       </div>
 
       <div class="sec-label dim">● その他</div>
       <div class="chk-list">
-        <label class="chk-item"><input type="checkbox" value="月１度エアフィルター清掃を強くお伝えください。" onchange="chkToggle(this)"><span class="chk-text">月１度エアフィルター清掃を強くお伝えください。</span></label>
-        <label class="chk-item"><input type="checkbox" value="庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。" onchange="chkToggle(this)"><span class="chk-text">庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。</span></label>
-        <label class="chk-item"><input type="checkbox" value="Wi-Fi環境のご確認をお願いします。" onchange="chkToggle(this)"><span class="chk-text">Wi-Fi環境のご確認をお願いします。</span></label>
-        <label class="chk-item"><input type="checkbox" value="ドアガスケット劣化防止の為に、アイドルタイムの運転停止や拭き取りを強く勧めてください。" onchange="chkToggle(this)"><span class="chk-text">ドアガスケット劣化防止の為に、アイドルタイムの運転停止や拭き取りを強く勧めてください。</span></label>
+        <label class="chk-item"><input type="checkbox" value="月１度エアフィルター清掃を強くお伝えください。" data-group="other" onchange="chkToggle(this)"><span class="chk-text">月１度エアフィルター清掃を強くお伝えください。</span></label>
+        <label class="chk-item"><input type="checkbox" value="庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。" data-group="other" onchange="chkToggle(this)"><span class="chk-text">庫内の温度を下げるためにハンドシャワーをかけることは絶対しないようお伝えください。</span></label>
+        <label class="chk-item"><input type="checkbox" value="Wi-Fi環境のご確認をお願いします。" data-group="other" onchange="chkToggle(this)"><span class="chk-text">Wi-Fi環境のご確認をお願いします。</span></label>
+        <label class="chk-item"><input type="checkbox" value="ドアガスケット劣化防止の為に、アイドルタイムの運転停止や拭き取りを強く勧めてください。" data-group="other" onchange="chkToggle(this)"><span class="chk-text">ドアガスケット劣化防止の為に、アイドルタイムの運転停止や拭き取りを強く勧めてください。</span></label>
       </div>
     </div>
 
@@ -319,10 +345,9 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
       </select>
       <div id="free-saved-preview" style="display:none;">
         <textarea id="inp-free-saved-body" style="min-height:120px;margin-bottom:8px;" readonly></textarea>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
           <button class="btn-secondary" style="font-size:12px;padding:9px;border-radius:var(--rsm);cursor:pointer;" onclick="useSavedText()">この内容を使用</button>
           <button class="btn-secondary" style="font-size:12px;padding:9px;border-radius:var(--rsm);cursor:pointer;" onclick="editSavedText()">編集</button>
-          <button class="btn-danger" style="width:100%;padding:9px;" onclick="delSavedText()">削除</button>
         </div>
       </div>
     </div>
@@ -360,6 +385,10 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
   <div class="section">
     <div class="stitle">ディーラーの管理</div>
     <div id="dealer-list"></div>
+  </div>
+  <div class="section">
+    <div class="stitle">自由記入 保存済みの管理</div>
+    <div id="free-saved-list"></div>
   </div>
 </div>
 
@@ -509,7 +538,6 @@ function editSavedText(){
 function delSavedText(){
   const idx=$('sel-free-saved').value;
   if(idx==='')return;
-  if(!confirm('この保存データを削除しますか？'))return;
   const list=LS.get('rational_free',[]);
   list.splice(parseInt(idx),1);
   LS.set('rational_free',list);
@@ -581,7 +609,6 @@ function saveRSM(){LS.set('rational_rsm',{rsa:$('inp-rsa').value,rsm:$('inp-rsm'
 
 // ===== リセット =====
 function resetForm(){
-  if(!confirm('入力内容をすべて削除しますか？'))return;
   // テキスト入力クリア
   ['inp-site','inp-addr','inp-tel','inp-tanto','inp-sf','inp-web','inp-install-date','inp-req-other','inp-sticker-note','inp-biko-free-top'].forEach(id=>{const el=$(id);if(el)el.value='';});
   // セレクトをリセット
@@ -641,10 +668,18 @@ function buildMail(){
   const activeBikoPanel=$('biko-select').classList.contains('active')?'select':'free';
   if(activeBikoPanel==='select'){
     const freeTop=$('inp-biko-free-top').value.trim();
-    const fixed='・時刻・日付設定';
-    const checked=[...document.querySelectorAll('#biko-select .chk-list input:checked')].map(el=>'・'+el.value);
-    const lines=[...(freeTop?[freeTop]:[]),fixed,...checked].filter(Boolean);
-    noteText=lines.join('\n');
+    // 基本説明チェック
+    const basicChecked=[...document.querySelectorAll('#biko-select .chk-list input[data-group="basic"]:checked')].map(el=>'・'+el.value);
+    // 事前設定チェック
+    const presetChecked=[...document.querySelectorAll('#biko-select .chk-list input[data-group="preset"]:checked')].map(el=>'・'+el.value);
+    // その他チェック
+    const otherChecked=[...document.querySelectorAll('#biko-select .chk-list input[data-group="other"]:checked')].map(el=>'・'+el.value);
+    const lines=[];
+    if(freeTop)lines.push(freeTop);
+    lines.push(...basicChecked);
+    if(presetChecked.length){lines.push('●事前設定');lines.push(...presetChecked);}
+    if(otherChecked.length){lines.push('●その他');lines.push(...otherChecked);}
+    noteText=lines.filter(Boolean).join('\n');
   } else {
     noteText=freeTextUsed||'';
   }
@@ -714,30 +749,101 @@ function fallbackCopy(txt){
 }
 
 // ===== 設定画面 =====
+function makeBtn(label, cls, style, fn){
+  const b=document.createElement('button');
+  b.textContent=label;
+  b.className=cls;
+  if(style)b.style.cssText=style;
+  b.addEventListener('click', fn);
+  return b;
+}
+
 function renderSettings(){
   // FL
   const fl=LS.get('rational_fl',DEF_FL);
-  $('fl-list').innerHTML=fl.map((f,i)=>
-    `<div class="tpl-card"><div class="tpl-text"><div style="font-weight:700;">${esc(f.name)}</div><div style="font-size:12px;color:var(--text2);">${esc(f.email)}</div></div><button class="btn-danger" onclick="delFL(${i})">削除</button></div>`
-  ).join('')||'<p style="font-size:13px;color:var(--text3);">まだ登録されていません</p>';
+  const flEl=$('fl-list');flEl.innerHTML='';
+  if(!fl.length){flEl.innerHTML='<p style="font-size:13px;color:var(--text3);">まだ登録されていません</p>';}
+  fl.forEach((f,i)=>{
+    const card=document.createElement('div');card.className='tpl-card';
+    const info=document.createElement('div');info.className='tpl-text';
+    info.innerHTML=`<div style="font-weight:700;">${esc(f.name)}</div><div style="font-size:12px;color:var(--text2);">${esc(f.email)}</div>`;
+    card.appendChild(info);
+    card.appendChild(makeBtn('削除','btn-danger','',()=>delFL(i)));
+    flEl.appendChild(card);
+  });
 
   // CC
   const cc=LS.get('rational_cc',DEF_CC);
-  $('cc-list').innerHTML=cc.map((c,i)=>
-    `<div class="tpl-card"><div class="tpl-text"><div style="font-weight:700;">${esc(c.name)}</div><div style="font-size:12px;color:var(--text2);">${esc(c.email)}</div></div><button class="btn-danger" onclick="delCC(${i})">削除</button></div>`
-  ).join('');
-
-  // モデル
-  const models=LS.get('rational_models',DEF_MODELS);
-  $('model-list').innerHTML=models.map((m,i)=>
-    `<div class="tpl-card"><span class="tpl-text">${esc(m)}</span><button class="btn-danger" onclick="delModel(${i})">削除</button></div>`
-  ).join('');
+  const ccEl=$('cc-list');ccEl.innerHTML='';
+  cc.forEach((f,i)=>{
+    const card=document.createElement('div');card.className='tpl-card';
+    const info=document.createElement('div');info.className='tpl-text';
+    info.innerHTML=`<div style="font-weight:700;">${esc(f.name)}</div><div style="font-size:12px;color:var(--text2);">${esc(f.email)}</div>`;
+    card.appendChild(info);
+    card.appendChild(makeBtn('削除','btn-danger','',()=>delCC(i)));
+    ccEl.appendChild(card);
+  });
 
   // ディーラー
   const dealers=LS.get('rational_dealers',[]);
-  $('dealer-list').innerHTML=dealers.length?dealers.map((d,i)=>
-    `<div class="tpl-card"><div style="flex:1;"><div style="font-size:13px;font-weight:700;">${esc(d.name)}</div><div style="font-size:12px;color:var(--text2);margin-top:2px;">${esc(d.contact||'—')}</div></div><button class="btn-danger" onclick="delDealer(${i})">削除</button></div>`
-  ).join(''):'<p style="font-size:13px;color:var(--text3);">まだ登録されていません</p>';
+  const dlEl=$('dealer-list');dlEl.innerHTML='';
+  if(!dealers.length){dlEl.innerHTML='<p style="font-size:13px;color:var(--text3);">まだ登録されていません</p>';}
+  dealers.forEach((d,i)=>{
+    const card=document.createElement('div');card.className='tpl-card';
+    const info=document.createElement('div');info.style.flex='1';
+    info.innerHTML=`<div style="font-size:13px;font-weight:700;">${esc(d.name)}</div><div style="font-size:12px;color:var(--text2);margin-top:2px;">${esc(d.contact||'—')}</div>`;
+    const btns=document.createElement('div');btns.style.cssText='display:flex;gap:6px;flex-shrink:0;';
+    btns.appendChild(makeBtn('編集','btn-secondary','font-size:12px;padding:6px 12px;width:auto;border-radius:8px;cursor:pointer;',()=>editDealer(i)));
+    btns.appendChild(makeBtn('削除','btn-danger','',()=>delDealer(i)));
+    card.appendChild(info);card.appendChild(btns);
+    dlEl.appendChild(card);
+  });
+
+  // 自由記入保存済み
+  const freeList=LS.get('rational_free',[]);
+  const frEl=$('free-saved-list');frEl.innerHTML='';
+  if(!freeList.length){frEl.innerHTML='<p style="font-size:13px;color:var(--text3);">まだ保存されていません</p>';}
+  freeList.forEach((f,i)=>{
+    const card=document.createElement('div');card.className='tpl-card';
+    const info=document.createElement('div');info.style.flex='1';
+    const preview=f.body.length>50?f.body.slice(0,50)+'…':f.body;
+    info.innerHTML=`<div style="font-size:13px;font-weight:700;">${esc(f.name)}</div><div style="font-size:12px;color:var(--text2);margin-top:2px;white-space:pre-wrap;">${esc(preview)}</div>`;
+    const btns=document.createElement('div');btns.style.cssText='display:flex;gap:6px;flex-shrink:0;';
+    btns.appendChild(makeBtn('編集','btn-secondary','font-size:12px;padding:6px 12px;width:auto;border-radius:8px;cursor:pointer;',()=>editFreeSaved(i)));
+    btns.appendChild(makeBtn('削除','btn-danger','',()=>delFreeSaved(i)));
+    card.appendChild(info);card.appendChild(btns);
+    frEl.appendChild(card);
+  });
+}
+
+function editFreeSaved(i){
+  const list=LS.get('rational_free',[]);
+  const f=list[i];if(!f)return;
+  $('edit-free-name').value=f.name;
+  $('edit-free-body').value=f.body;
+  $('modal-free-edit').dataset.editIdx=i;
+  openModal('modal-free-edit');
+}
+function saveEditFree(){
+  const name=$('edit-free-name').value.trim();
+  const body=$('edit-free-body').value.trim();
+  if(!name){showToast('⚠ 名前を入力してください');return;}
+  const list=LS.get('rational_free',[]);
+  const i=parseInt($('modal-free-edit').dataset.editIdx);
+  list[i]={name,body};
+  LS.set('rational_free',list);
+  renderFreeSavedSelect();
+  renderSettings();
+  closeModal('modal-free-edit');
+  showToast('✓ 更新しました');
+}
+function delFreeSaved(i){
+  const list=LS.get('rational_free',[]);
+  list.splice(i,1);
+  LS.set('rational_free',list);
+  renderFreeSavedSelect();
+  renderSettings();
+  showToast('✓ 削除しました');
 }
 
 function addFL(){
@@ -787,6 +893,26 @@ function addModel(){
 }
 function delModel(i){
   const arr=LS.get('rational_models',DEF_MODELS);arr.splice(i,1);LS.set('rational_models',arr);renderSettings();
+}
+function editDealer(i){
+  const dealers=LS.get('rational_dealers',[]);
+  const d=dealers[i];if(!d)return;
+  $('edit-dealer-name').value=d.name;
+  $('edit-dealer-contact').value=d.contact||'';
+  $('modal-dealer-edit').dataset.editIdx=i;
+  openModal('modal-dealer-edit');
+}
+function saveEditDealer(){
+  const name=$('edit-dealer-name').value.trim();
+  const contact=$('edit-dealer-contact').value.trim();
+  if(!name){showToast('⚠ ディーラー名を入力してください');return;}
+  const dealers=LS.get('rational_dealers',[]);
+  const i=parseInt($('modal-dealer-edit').dataset.editIdx);
+  dealers[i]={name,contact};
+  LS.set('rational_dealers',dealers);
+  renderSettings();renderDealerSelect();
+  closeModal('modal-dealer-edit');
+  showToast('✓ 更新しました');
 }
 function delDealer(i){
   const arr=LS.get('rational_dealers',[]);arr.splice(i,1);LS.set('rational_dealers',arr);renderSettings();renderDealerSelect();
