@@ -296,10 +296,8 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
 
     <!-- 選択式パネル -->
     <div class="biko-panel active" id="biko-select">
-      <!-- フリーメッセージ欄（一番上） -->
-      <div class="fr"><input type="text" id="inp-biko-free-top" placeholder="フリーメッセージ（任意）"></div>
-
       <div class="sec-label dim">● 基本説明</div>
+      <div class="fr"><input type="text" id="inp-biko-free-top" placeholder="フリーメッセージ（任意）"></div>
       <div class="chk-list" style="margin-bottom:12px;">
         <label class="chk-item"><input type="checkbox" value="マニュアル調理中心の説明をお願いします。" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">マニュアル調理中心の説明をお願いします。</span></label>
         <label class="chk-item"><input type="checkbox" value="プログラム中心の説明をお願いします。" data-group="basic" onchange="chkToggle(this)"><span class="chk-text">プログラム中心の説明をお願いします。</span></label>
@@ -327,6 +325,7 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
         <label class="chk-item"><input type="checkbox" value="Wi-Fi環境のご確認をお願いします。" data-group="other" onchange="chkToggle(this)"><span class="chk-text">Wi-Fi環境のご確認をお願いします。</span></label>
         <label class="chk-item"><input type="checkbox" value="ドアガスケット劣化防止の為に、アイドルタイムの運転停止や拭き取りを強く勧めてください。" data-group="other" onchange="chkToggle(this)"><span class="chk-text">ドアガスケット劣化防止の為に、アイドルタイムの運転停止や拭き取りを強く勧めてください。</span></label>
       </div>
+      <div class="fr" style="margin-top:10px;"><input type="text" id="inp-biko-free-bottom" placeholder="フリーメッセージ（任意）"></div>
     </div>
 
     <!-- 自由記入パネル -->
@@ -611,7 +610,7 @@ function saveRSM(){LS.set('rational_rsm',{rsa:$('inp-rsa').value,rsm:$('inp-rsm'
 // ===== リセット =====
 function resetForm(){
   // テキスト入力クリア
-  ['inp-site','inp-addr','inp-tel','inp-tanto','inp-sf','inp-web','inp-install-date','inp-req-other','inp-sticker-note','inp-biko-free-top'].forEach(id=>{const el=$(id);if(el)el.value='';});
+  ['inp-site','inp-addr','inp-tel','inp-tanto','inp-sf','inp-web','inp-install-date','inp-req-other','inp-sticker-note','inp-biko-free-top','inp-biko-free-bottom'].forEach(id=>{const el=$(id);if(el)el.value='';});
   // セレクトをリセット
   $('sel-fl').value='';
   $('sel-hour').value='10';$('sel-min').value='00';
@@ -679,7 +678,8 @@ function buildMail(){
     if(freeTop)lines.push(freeTop);
     lines.push(...basicChecked);
     if(presetChecked.length){lines.push('●事前設定');lines.push(...presetChecked);}
-    if(otherChecked.length){lines.push('●その他');lines.push(...otherChecked);}
+    const freeBottom=$('inp-biko-free-bottom').value.trim();
+    if(otherChecked.length||freeBottom){lines.push('●その他');lines.push(...otherChecked);if(freeBottom)lines.push(freeBottom);}
     noteText=lines.filter(Boolean).join('\n');
   } else {
     noteText=freeTextUsed||'';
