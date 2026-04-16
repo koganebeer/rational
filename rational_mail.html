@@ -22,14 +22,14 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .header-title{font-size:15px;font-weight:700;letter-spacing:.05em;}
 .header-title span{color:var(--accent);}
 .tab-bar{display:flex;gap:4px;}
-.tab-btn{padding:7px 13px;border-radius:20px;border:none;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;background:transparent;color:var(--text2);}
+.tab-btn{padding:7px 13px;border-radius:20px;border:none;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:var(--text2);}
 .tab-btn.active{background:var(--accent);color:#fff;}
 .page{display:none;padding:14px;}
 .page.active{display:block;}
 .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
-.stitle{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.stitle{font-size:15px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
 .stitle::before{content:'';width:3px;height:12px;background:var(--accent);border-radius:2px;display:block;}
-label.lbl{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:500;}
+label.lbl{display:block;font-size:15px;color:var(--text2);margin-bottom:4px;font-weight:500;}
 .fr{margin-bottom:10px;}
 .fr:last-child{margin-bottom:0;}
 input[type=text],input[type=date],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:15px;padding:11px 12px;outline:none;-webkit-appearance:none;appearance:none;}
@@ -39,7 +39,9 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
 input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px;height:22px;}
 .time-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;}
 .time-colon{text-align:center;font-size:22px;font-weight:700;color:var(--text2);}
-.model-grid{display:grid;grid-template-columns:5fr 3fr 2fr;gap:5px;margin-bottom:6px;}
+.model-grid-header{display:grid;grid-template-columns:5fr 3fr 3fr 2fr;gap:5px;margin-bottom:2px;}
+.model-grid-header span{font-size:15px;color:var(--text2);font-weight:600;padding-left:2px;}
+.model-grid{display:grid;grid-template-columns:5fr 3fr 3fr 2fr;gap:5px;margin-bottom:6px;}
 .model-grid:last-child{margin-bottom:0;}
 .tog-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
 .tog-row:last-child{border-bottom:none;}
@@ -51,11 +53,11 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
 .toggle input:checked+.tslider{background:var(--accent);border-color:var(--accent);}
 .toggle input:checked+.tslider::after{transform:translateX(20px);background:#fff;}
 .req-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
-.req-btn{padding:10px 4px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;text-align:center;-webkit-appearance:none;}
+.req-btn{padding:10px 4px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:center;-webkit-appearance:none;}
 .req-btn.active{background:rgba(79,124,255,.15);border-color:var(--accent);color:var(--accent);}
 .dealer-row{display:flex;gap:8px;align-items:stretch;}
 .dealer-row select{flex:1;}
-.btn-icon{width:44px;min-width:44px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.btn-icon{width:44px;min-width:44px;border-radius:var(--rsm);border:1px solid #f87171;background:rgba(248,113,113,.12);color:#f87171;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;font-weight:700;}
 .btn{width:100%;padding:15px;border-radius:var(--radius);border:none;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
 .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);font-size:14px;padding:12px;}
@@ -69,12 +71,12 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
 .chk-text{font-size:13px;line-height:1.5;}
 /* 備考タブ切替 */
 .biko-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;}
-.biko-tab{padding:11px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:center;}
+.biko-tab{padding:11px;border-radius:var(--rsm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;text-align:center;}
 .biko-tab.active{background:rgba(79,124,255,.15);border-color:var(--accent);color:var(--accent);}
 .biko-panel{display:none;}
 .biko-panel.active{display:block;}
-.fixed-item{font-size:13px;color:var(--text2);padding:9px 12px;background:var(--surface2);border-radius:var(--rsm);margin-bottom:6px;border:1px solid var(--border);}
-.sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:6px;margin-top:12px;}
+.fixed-item{font-size:14px;color:var(--text2);padding:9px 12px;background:var(--surface2);border-radius:var(--rsm);margin-bottom:6px;border:1px solid var(--border);}
+.sec-label{font-size:15px;font-weight:700;letter-spacing:.05em;margin-bottom:6px;margin-top:12px;}
 .sec-label.accent{color:var(--accent);}
 .sec-label.dim{color:var(--text2);}
 /* 自由記入 */
@@ -88,21 +90,21 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
 .prev-body{background:#fff;color:#000;border-radius:var(--radius);padding:16px;font-size:13px;line-height:1.8;white-space:pre-wrap;margin-bottom:12px;min-height:200px;}
 .divider{height:1px;background:var(--border);margin:10px 0;}
 .tpl-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
-.tpl-text{font-size:13px;line-height:1.5;flex:1;}
+.tpl-text{font-size:14px;line-height:1.5;flex:1;}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--surface);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding:20px 16px 40px;width:100%;max-width:500px;}
 .modal-title{font-size:15px;font-weight:700;margin-bottom:16px;text-align:center;}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--green);color:#000;font-weight:700;font-size:13px;padding:11px 22px;border-radius:22px;z-index:999;transition:transform .3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
-.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:rgba(79,124,255,.15);color:var(--accent);margin-left:6px;}
-.hint{font-size:11px;color:var(--text3);margin-top:3px;}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:700;background:rgba(79,124,255,.15);color:var(--accent);margin-left:6px;}
+.hint{font-size:13px;color:var(--text3);margin-top:3px;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title"><span>Rational</span> 取説依頼</div>
+  <div class="header-title"><img src="ラショナルロゴＰＮＧ_.png" style="height:28px;vertical-align:middle;margin-right:8px;">取説依頼</div>
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('form')">作成</button>
     <button class="tab-btn" onclick="showTab('preview')">確認</button>
@@ -233,21 +235,23 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
   <div class="section">
     <div class="stitle">機器情報</div>
     <div class="fr">
-      <label class="lbl">モデル / 動力 / 台数</label>
+      <div class="model-grid-header">
+        <span>モデル</span><span>動力</span><span>オプション</span><span>台数</span>
+      </div>
       <div class="model-grid">
         <select id="sel-model-1"><option value="">（未選択）</option><option>iCombi Pro XS</option><option>iCombi Pro 6-1/1</option><option>iCombi Pro 10-1/1</option><option>iCombi Pro 20-1/1</option><option>iCombi Pro 6-2/1</option><option>iCombi Pro 10-2/1</option><option>iCombi Pro 20-2/1</option><option>iCombi Classic 6-1/1</option><option>iCombi Classic 10-1/1</option><option>iCombi Classic 20-1/1</option><option>iCombi Classic 6-2/1</option><option>iCombi Classic 10-2/1</option><option>iCombi Classic 20-2/1</option><option>iVario XS</option><option>iVario Pro 2-S（圧力なし）</option><option>iVario Pro 2-S（圧力あり）</option><option>iVario Pro L（圧力なし）</option><option>iVario Pro L（圧力あり）</option><option>iVario Pro XL（圧力なし）</option><option>iVario Pro XL（圧力あり）</option></select>
         <select id="sel-power-1"><option value="">—</option><option>電気式</option><option>都市ガス</option><option>LPG</option></select>
-        <select id="sel-qty-1"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
+        <select id="sel-opt-1"><option value="">—</option><option>AutoDose仕様</option><option>UltraVent</option><option>UltraVent plus</option></select><select id="sel-qty-1"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
       </div>
       <div class="model-grid">
         <select id="sel-model-2"><option value="">（未選択）</option><option>iCombi Pro XS</option><option>iCombi Pro 6-1/1</option><option>iCombi Pro 10-1/1</option><option>iCombi Pro 20-1/1</option><option>iCombi Pro 6-2/1</option><option>iCombi Pro 10-2/1</option><option>iCombi Pro 20-2/1</option><option>iCombi Classic 6-1/1</option><option>iCombi Classic 10-1/1</option><option>iCombi Classic 20-1/1</option><option>iCombi Classic 6-2/1</option><option>iCombi Classic 10-2/1</option><option>iCombi Classic 20-2/1</option><option>iVario XS</option><option>iVario Pro 2-S（圧力なし）</option><option>iVario Pro 2-S（圧力あり）</option><option>iVario Pro L（圧力なし）</option><option>iVario Pro L（圧力あり）</option><option>iVario Pro XL（圧力なし）</option><option>iVario Pro XL（圧力あり）</option></select>
         <select id="sel-power-2"><option value="">—</option><option>電気式</option><option>都市ガス</option><option>LPG</option></select>
-        <select id="sel-qty-2"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
+        <select id="sel-opt-2"><option value="">—</option><option>AutoDose仕様</option><option>UltraVent</option><option>UltraVent plus</option></select><select id="sel-qty-2"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
       </div>
       <div class="model-grid">
         <select id="sel-model-3"><option value="">（未選択）</option><option>iCombi Pro XS</option><option>iCombi Pro 6-1/1</option><option>iCombi Pro 10-1/1</option><option>iCombi Pro 20-1/1</option><option>iCombi Pro 6-2/1</option><option>iCombi Pro 10-2/1</option><option>iCombi Pro 20-2/1</option><option>iCombi Classic 6-1/1</option><option>iCombi Classic 10-1/1</option><option>iCombi Classic 20-1/1</option><option>iCombi Classic 6-2/1</option><option>iCombi Classic 10-2/1</option><option>iCombi Classic 20-2/1</option><option>iVario XS</option><option>iVario Pro 2-S（圧力なし）</option><option>iVario Pro 2-S（圧力あり）</option><option>iVario Pro L（圧力なし）</option><option>iVario Pro L（圧力あり）</option><option>iVario Pro XL（圧力なし）</option><option>iVario Pro XL（圧力あり）</option></select>
         <select id="sel-power-3"><option value="">—</option><option>電気式</option><option>都市ガス</option><option>LPG</option></select>
-        <select id="sel-qty-3"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
+        <select id="sel-opt-3"><option value="">—</option><option>AutoDose仕様</option><option>UltraVent</option><option>UltraVent plus</option></select><select id="sel-qty-3"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
       </div>
     </div>
     <div class="fr"><label class="lbl">設置日</label><input type="date" id="inp-install-date"></div>
@@ -625,7 +629,7 @@ function resetForm(){
   // セレクトをリセット
   $('sel-fl').value='';
   $('sel-hour').value='10';$('sel-min').value='00';
-  [1,2,3].forEach(i=>{$('sel-model-'+i).value='';$('sel-power-'+i).value='';$('sel-qty-'+i).value='';});
+  [1,2,3].forEach(i=>{$('sel-model-'+i).value='';$('sel-power-'+i).value='';$('sel-opt-'+i).value='';$('sel-qty-'+i).value='';});
   $('sel-dealer').value='';$('inp-dealer-contact').value='';
   // 依頼内容リセット
   currentReq='通常取説';
@@ -668,9 +672,9 @@ function buildMail(){
   const site=$('inp-site').value||'（未入力）';
 
   const modelLines=[1,2,3].map(i=>{
-    const m=$('sel-model-'+i).value,p=$('sel-power-'+i).value,q=$('sel-qty-'+i).value;
+    const m=$('sel-model-'+i).value,p=$('sel-power-'+i).value,o=$('sel-opt-'+i).value,q=$('sel-qty-'+i).value;
     if(!m)return null;
-    return[m,p,q].filter(Boolean).join('　');
+    return[m,p,o,q].filter(Boolean).join('　');
   }).filter(Boolean);
   const modelText=modelLines.length?modelLines.join('\n　　　　　'):'（未選択）';
 
