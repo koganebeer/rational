@@ -34,6 +34,7 @@ label.lbl{display:block;font-size:15px;color:var(--text2);margin-bottom:4px;font
 .fr:last-child{margin-bottom:0;}
 input[type=text],input[type=date],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:15px;padding:11px 12px;outline:none;-webkit-appearance:none;appearance:none;}
 input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);}
+input[type=text]::placeholder,textarea::placeholder{color:var(--text3);opacity:0.6;}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b90a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
 textarea{resize:vertical;min-height:80px;line-height:1.6;}
 input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px;height:22px;}
@@ -254,7 +255,13 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);width:22px
         <select id="sel-opt-3"><option value="">—</option><option>AutoDose仕様</option><option>UltraVent</option><option>UltraVent plus</option></select><select id="sel-qty-3"><option value="">—</option><option>1台</option><option>2台</option><option>3台</option><option>4台</option><option>5台</option><option>6台</option><option>7台</option><option>8台</option><option>9台</option><option>10台</option></select>
       </div>
     </div>
-    <div class="fr"><label class="lbl">設置日</label><input type="date" id="inp-install-date"></div>
+    <div class="fr">
+  <label class="lbl">設置日</label>
+  <div style="position:relative;">
+    <input type="date" id="inp-install-date" style="color:transparent;" onchange="onInstallDateChange(this)">
+    <div id="install-date-display" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;padding:11px 12px;font-size:15px;color:var(--text3);pointer-events:none;">日付を選択</div>
+  </div>
+</div>
     <div class="fr">
       <label class="lbl">依頼内容</label>
       <div class="req-row">
@@ -620,14 +627,28 @@ function saveNewDealer(){
 }
 
 // ===== RSM =====
+function onInstallDateChange(el){
+  const display=$('install-date-display');
+  if(el.value){
+    const d=new Date(el.value+'T00:00:00');
+    const y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();
+    display.textContent=`${y}/${String(m).padStart(2,'0')}/${String(day).padStart(2,'0')}`;
+    display.style.color='var(--text)';
+    el.style.color='transparent';
+  } else {
+    display.textContent='日付を選択';
+    display.style.color='var(--text3)';
+  }
+}
 function saveRSM(){LS.set('rational_rsm',{rsa:$('inp-rsa').value,rsm:$('inp-rsm').value});}
 
 // ===== リセット =====
 function resetForm(){
   // テキスト入力クリア
-  ['inp-site','inp-addr','inp-tel','inp-tanto','inp-sf','inp-web','inp-install-date','inp-req-other','inp-sticker-note','inp-biko-free-top','inp-biko-free-bottom'].forEach(id=>{const el=$(id);if(el)el.value='';});
+  ['inp-site','inp-addr','inp-tel','inp-tanto','inp-sf','inp-web','inp-req-other','inp-sticker-note','inp-biko-free-top','inp-biko-free-bottom'].forEach(id=>{const el=$(id);if(el)el.value='';});
   // セレクトをリセット
   $('sel-fl').value='';
+  $('inp-install-date').value='';onInstallDateChange($('inp-install-date'));
   $('sel-hour').value='10';$('sel-min').value='00';
   [1,2,3].forEach(i=>{$('sel-model-'+i).value='';$('sel-power-'+i).value='';$('sel-opt-'+i).value='';$('sel-qty-'+i).value='';});
   $('sel-dealer').value='';$('inp-dealer-contact').value='';
